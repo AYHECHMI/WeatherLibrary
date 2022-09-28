@@ -15,7 +15,7 @@ public struct Weather: Codable {
     public let wind: Wind?
     public let base: String?
     public let dt: Int?
-    public let weathers: [WeatherDetails]?
+    public let weather: [WeatherDetails]?
     public let sys: Sys?
     public let clouds: Clouds?
     public let main: Mains?

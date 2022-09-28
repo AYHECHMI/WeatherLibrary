@@ -64,4 +64,31 @@ public struct WeatherLibrary {
         }.resume()
         
     }
+    
+    public func getWeatherForCityName(name: String, completionHandler: @escaping (Result<Weather>) -> Void){
+        
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host   = "api.openweathermap.org"
+        components.path   = "/data/2.5/weather"
+        components.queryItems = [
+            URLQueryItem(name: "appid", value: apiKey),
+            URLQueryItem(name: "q", value: name),
+        ]
+        
+        URLSession.shared.dataTask(with: components.url!) { data, response, error in
+            guard let data = data else {
+                completionHandler(Result.error(WeatherError.invalidData))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let weather = try decoder.decode(Weather.self, from: data)
+                completionHandler(Result.success(weather))
+            } catch let error {
+                completionHandler(Result.error(error))
+            }
+        }.resume()
+        
+    }
 }
